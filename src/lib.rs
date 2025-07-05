@@ -97,8 +97,8 @@ pub fn match_items<'a>(query: &str, items: &[&'a str]) -> Vec<(&'a str, usize)> 
     let mut scored: Vec<_> = items
         .iter()
         .map(|item| (*item, score(query, item)))
-	.filter(|&(_, score)| score > 0)
         .collect();
+    
     scored.sort_by(|a, b| b.1.cmp(&a.1));
     scored
 }

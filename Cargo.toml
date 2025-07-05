@@ -1,6 +1,6 @@
 [package]
 name = "matchr"
-version = "0.2.3"
+version = "0.2.4"
 edition = "2021"
 authors = ["0l3d 0l3dgit@gmail.com"]
 description = "A fast fuzzy matcher library written in Rust for use in CLI tools and TUI apps."
