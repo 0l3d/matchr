@@ -1,5 +1,5 @@
 /// Scores how well `query` matches the `candi` string.
-/// 
+///
 /// The score is based on character positions with higher weight for characters
 /// matched earlier in the `query`. Exact matches yield the highest score (100).
 ///
@@ -40,7 +40,7 @@ pub fn score(query: &str, candi: &str) -> usize {
                 glob_score += score_for_pos;
                 break;
             } else {
-                glob_score = glob_score.saturating_sub(5);
+                // glob_score = glob_score.saturating_sub(5);
             }
         }
 
@@ -55,7 +55,6 @@ pub fn score(query: &str, candi: &str) -> usize {
 
     glob_score
 }
-
 
 /// Matches multiple `items` against the `query` and returns
 /// a sorted vector of tuples containing the item and its match score.
@@ -91,15 +90,55 @@ mod tests {
 
     #[test]
     fn test_basic_match() {
-        let query = "fefe";
+        let query = "grex";
         let candidates = [
-            "fefe",
-            "fefete",
-	    "fefafef",
-            "eeeeeeeeeee",
-            "feature",
-            "banana",
-            "effort",
+            "eeeeeeeeeeeeeeeeeeeeeeeee",
+            "cat",
+            "cp",
+            "mv",
+            "rm",
+            "touch",
+            "mkdir",
+            "rmdir",
+            "grep",
+            "find",
+            "xargs",
+            "cut",
+            "head",
+            "tail",
+            "less",
+            "more",
+            "man",
+            "chmod",
+            "chown",
+            "ping",
+            "curl",
+            "wget",
+            "ssh",
+            "scp",
+            "ps",
+            "kill",
+            "top",
+            "htop",
+            "nano",
+            "vim",
+            "xbps-install",
+            "xbps-remove",
+            "xbps-query",
+            "sudo",
+            "doas",
+            "su",
+            "env",
+            "export",
+            "uname",
+            "whoami",
+            "uptime",
+            "date",
+            "cal",
+            "clear",
+            "tput",
+            "printf",
+            "echo",
         ];
 
         let results = match_items(query, &candidates);
