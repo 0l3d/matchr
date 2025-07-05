@@ -1,7 +1,9 @@
 /// Scores how well `query` matches the `candi` string.
 ///
-/// The score is based on character positions with higher weight for characters
-/// matched earlier in the `query`. Exact matches yield the highest score (100).
+/// The score is based on whether `query` is a subsequence of `candi`, with additional weighting:
+/// - Characters matched earlier in `candi` get higher weight.
+/// - Consecutive matched characters earn a small bonus.
+/// - Exact matches yield the highest score (100).
 ///
 /// # Arguments
 ///
@@ -19,45 +21,43 @@
 /// assert_eq!(score, 100);
 /// ```
 pub fn score(query: &str, candi: &str) -> usize {
-    let mut glob_score: usize = 0;
+    if !is_subsequence(query, candi) {
+        return 0;
+    }
 
-    let mut quer_chars = query.chars();
+    let mut score = 0usize;
+    let mut candi_chars = candi.char_indices();
+    let mut last_pos = None;
 
-    for i in 0..query.len() {
-        let query_char = quer_chars.next();
-        let mut candi_chars = candi.chars();
+    for qc in query.chars() {
+        let mut found = false;
+        while let Some((pos, cc)) = candi_chars.next() {
+            if cc == qc {
+                let pos_score = 10usize.saturating_sub(pos);
+                score += pos_score;
 
-        for _char_index in 0..candi.len() {
-            let letter = candi_chars.next();
+                if let Some(lp) = last_pos {
+                    if pos == lp + 1 {
+                        score += score / 10;
+                    }
+                }
 
-            if query_char == letter {
-                let score_for_pos = match i {
-                    0 => 20,
-                    1 => 15,
-                    2 => 10,
-                    _ => 5,
-                };
-                glob_score += score_for_pos;
+                last_pos = Some(pos);
+                found = true;
                 break;
-            } else {
-                // glob_score = glob_score.saturating_sub(5);
             }
         }
-
-        if glob_score >= 100 {
-            break;
+        if !found {
+            return 0;
         }
     }
 
     if query == candi {
         return 100;
     }
+    let max_possible = query.len() * 15;
 
-    if is_subsequence(query, candi) {
-        glob_score += 30;
-    }
-
-    glob_score
+    ((score * 100) / max_possible).min(100)
 }
 
 fn is_subsequence(query: &str, candi: &str) -> bool {
