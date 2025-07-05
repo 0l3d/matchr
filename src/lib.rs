@@ -53,7 +53,21 @@ pub fn score(query: &str, candi: &str) -> usize {
         return 100;
     }
 
+    if is_subsequence(query, candi) {
+        glob_score += 30;
+    }
+
     glob_score
+}
+
+fn is_subsequence(query: &str, candi: &str) -> bool {
+    let mut candi_chars = candi.chars();
+    for qc in query.chars() {
+        if candi_chars.find(|cc| *cc == qc).is_none() {
+            return false;
+        }
+    }
+    true
 }
 
 /// Matches multiple `items` against the `query` and returns
@@ -79,6 +93,7 @@ pub fn match_items<'a>(query: &str, items: &[&'a str]) -> Vec<(&'a str, usize)> 
     let mut scored: Vec<_> = items
         .iter()
         .map(|item| (*item, score(query, item)))
+	.filter(|&(_, score)| score > 0)
         .collect();
     scored.sort_by(|a, b| b.1.cmp(&a.1));
     scored
@@ -90,7 +105,7 @@ mod tests {
 
     #[test]
     fn test_basic_match() {
-        let query = "grex";
+        let query = "xb";
         let candidates = [
             "eeeeeeeeeeeeeeeeeeeeeeeee",
             "cat",
