@@ -21,6 +21,10 @@
 /// assert_eq!(score, 100);
 /// ```
 pub fn score(query: &str, candi: &str) -> usize {
+    if query.is_empty() {
+        return 0;
+    }
+
     if !is_subsequence(query, candi) {
         return 0;
     }
