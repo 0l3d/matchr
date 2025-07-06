@@ -16,7 +16,7 @@ with a focus on CLI tools, search features, and quick approximate matching.
 Add this to your `Cargo.toml`:
 ```toml
 [dependencies]
-matchr = "0.2.4"
+matchr = "0.2.5"
 ```
 
 ## Usage
